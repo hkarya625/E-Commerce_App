@@ -1,0 +1,11 @@
+package com.himanshu_kumar.shoppingapp.di
+
+import com.himanshu_kumar.shoppingapp.ui.feature.home.HomeViewModel
+import org.koin.core.module.dsl.viewModel
+import org.koin.dsl.module
+
+val viewModelModule = module {
+    viewModel {
+        HomeViewModel(get())
+    }
+}
