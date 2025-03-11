@@ -4,5 +4,5 @@ import com.himanshu_kumar.domain.model.Product
 import com.himanshu_kumar.domain.network.ResultWrapper
 
 interface ProductRepository {
-    suspend fun getProducts(): ResultWrapper<List<Product>>
+    suspend fun getProducts(category:String?): ResultWrapper<List<Product>>
 }

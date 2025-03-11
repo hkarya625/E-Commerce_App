@@ -71,4 +71,5 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
 
     implementation(libs.compose.navigation)
+    implementation("io.coil-kt:coil-compose:2.7.0")             // used for load and display images from urls
 }

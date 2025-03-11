@@ -11,22 +11,23 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
+
+// This module focuses on configuring and providing the network-related components of the application.
 val networkModule = module {
-    single {
-        HttpClient(CIO){                              // cio is an engine used for http client
-            install(ContentNegotiation){              // configures JSON serialization and deserialization
-                json(Json {
-                    prettyPrint = true                // Formats JSON output in a readable way.
-                    isLenient = true                  // Allows parsing of non-standard JSON (e.g., missing quotes).
-                    ignoreUnknownKeys = true          // Ignores extra JSON fields not present in the Kotlin data class.
+    single {                                      // Koin declaration for a singleton instance
+        HttpClient(CIO) {                         // Creates an HttpClient with the CIO engine
+            install(ContentNegotiation) {         // Installs JSON content negotiation
+                json(Json {                       // Configures JSON serialization/deserialization
+                    prettyPrint = true            // Makes JSON output readable (for debugging)
+                    isLenient = true              // Allows parsing of lenient JSON formats
+                    ignoreUnknownKeys = true      // Ignores unknown JSON keys
                 })
             }
-            install(Logging){                         // enables logging of HTTP requests and responses, useful for debugging.
-                level = LogLevel.ALL                  // logs everything
+            install(Logging) {                    // Installs HTTP request/response logging
+                level = LogLevel.ALL              // Logs all HTTP traffic (for debugging)
             }
         }
     }
-
     single<NetworkService> {
         NetworkServiceImpl(get())
     }
