@@ -44,8 +44,7 @@ class NetworkServiceImpl(val client: HttpClient) : NetworkService {             
         val url = "$baseUrl/products/categories"
         return makeWebRequest<List<String>, List<String>>(
             url = url,
-            method = HttpMethod.Get,
-            mapper = null
+            method = HttpMethod.Get
         )
     }
 

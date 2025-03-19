@@ -12,7 +12,7 @@ class ShoppingApp:Application() {
         super.onCreate()
         startKoin {
             androidContext(this@ShoppingApp)      // Provides Android context to the koin
-            modules(listOf(                        // Load koin module
+            modules(listOf(                        // registers all the modules
                 presentationModule,
                 dataModule,
                 domainModule
