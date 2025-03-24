@@ -1,7 +1,12 @@
 package com.himanshu_kumar.data.network
 
 import com.himanshu_kumar.data.model.DataProductModel
+import com.himanshu_kumar.data.model.response.CategoriesListResponse
+import com.himanshu_kumar.domain.model.Category
+import com.himanshu_kumar.data.model.response.ProductListResponse
+import com.himanshu_kumar.domain.model.CategoriesListModel
 import com.himanshu_kumar.domain.model.Product
+import com.himanshu_kumar.domain.model.ProductListModel
 import com.himanshu_kumar.domain.network.NetworkService
 import com.himanshu_kumar.domain.network.ResultWrapper
 import io.ktor.client.HttpClient
@@ -22,29 +27,32 @@ import io.ktor.utils.io.errors.IOException
 
 class NetworkServiceImpl(val client: HttpClient) : NetworkService {                                 // Implementation of NetworkService interface for fetching product data.
 
-    private val baseUrl = "https://fakestoreapi.com"
-    override suspend fun getProducts(category:String?): ResultWrapper<List<Product>> {              // Asynchronous function to retrieve a list of products.
+    private val baseUrl = "https://api.escuelajs.co/api/v1"
+    override suspend fun getProducts(category:Int?): ResultWrapper<List<ProductListModel>> {              // Asynchronous function to retrieve a list of products.
 
         val url = if (category != null) {
-            "$baseUrl/products/category/$category"                                                 // API endpoint for product data with category.
+            "$baseUrl/products/?categoryId=$category"                                                 // API endpoint for product data with category.
         } else {
             "$baseUrl/products"                                                                    // API endpoint for product data without category.
         }
         return makeWebRequest(
             url = url,                                                                              // API endpoint for product data.
             method = HttpMethod.Get,                                                                // HTTP GET method for retrieving data.
-            mapper = { dataModels: List<DataProductModel> ->
-                                                                                                    // Mapper function to transform DataProductModel to Product.
-                dataModels.map { it.toProduct() }
+            mapper = { dataModels:List<ProductListResponse> ->
+                dataModels.map { it.toProductList() }                                              // Maps the list of data models to a list of product models.
             }
         )
     }
 
-    override suspend fun getCategories(): ResultWrapper<List<String>> {
-        val url = "$baseUrl/products/categories"
-        return makeWebRequest<List<String>, List<String>>(
+    override suspend fun getCategories(): ResultWrapper<List<CategoriesListModel>> {
+        val url = "$baseUrl/categories"
+
+        return makeWebRequest<List<CategoriesListResponse>, List<CategoriesListModel>>(
             url = url,
-            method = HttpMethod.Get
+            method = HttpMethod.Get,
+            mapper = { categories: List<CategoriesListResponse> ->
+                categories.map { it.toCategoryListModel() }
+            }
         )
     }
 

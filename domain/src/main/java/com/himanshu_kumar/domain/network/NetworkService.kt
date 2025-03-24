@@ -1,10 +1,12 @@
 package com.himanshu_kumar.domain.network
 
-import com.himanshu_kumar.domain.model.Product
+import com.himanshu_kumar.domain.model.CategoriesListModel
+
+import com.himanshu_kumar.domain.model.ProductListModel
 
 interface NetworkService{
-    suspend fun getProducts(category:String?):ResultWrapper<List<Product>>
-    suspend fun getCategories():ResultWrapper<List<String>>
+    suspend fun getProducts(category:Int?):ResultWrapper<List<ProductListModel>>
+    suspend fun getCategories():ResultWrapper<List<CategoriesListModel>>
 }
 
 sealed class ResultWrapper<out T> {

@@ -1,11 +1,13 @@
 package com.himanshu_kumar.data.di
 
+import android.util.Log
 import com.himanshu_kumar.data.network.NetworkServiceImpl
 import com.himanshu_kumar.domain.network.NetworkService
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
@@ -25,6 +27,12 @@ val networkModule = module {
             }
             install(Logging) {                    // Installs HTTP request/response logging
                 level = LogLevel.ALL              // Logs all HTTP traffic (for debugging)
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Log.d("BackendResponse",message)          // Prints the log message to the console
+                    }
+
+                }
             }
         }
     }

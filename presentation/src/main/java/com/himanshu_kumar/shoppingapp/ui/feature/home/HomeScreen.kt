@@ -1,5 +1,8 @@
 package com.himanshu_kumar.shoppingapp.ui.feature.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +45,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.himanshu_kumar.domain.model.CategoriesListModel
+import com.himanshu_kumar.domain.model.Category
 import com.himanshu_kumar.domain.model.Product
+import com.himanshu_kumar.domain.model.ProductListModel
 import com.himanshu_kumar.shoppingapp.R
 import org.koin.androidx.compose.koinViewModel
 
@@ -55,9 +62,9 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = koinView
         mutableStateOf<String?>(null)
     }
 
-    val feature = remember { mutableStateOf<List<Product>>(emptyList()) }
-    val popular = remember { mutableStateOf<List<Product>>(emptyList()) }
-    val categories = remember { mutableStateOf<List<String>>(emptyList()) }
+    val feature = remember { mutableStateOf<List<ProductListModel>>(emptyList()) }
+    val popular = remember { mutableStateOf<List<ProductListModel>>(emptyList()) }
+    val categories = remember { mutableStateOf<List<CategoriesListModel>>(emptyList()) }
 
     Scaffold {
         Surface(
@@ -89,7 +96,8 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = koinView
                 popular.value,
                 categories.value,
                 loading.value,
-                error.value)
+                error.value
+            )
         }
     }
 }
@@ -137,9 +145,9 @@ fun ProfileHeader(){
 
 @Composable
 fun HomeContent(
-    featured: List<Product>,
-    popularProducts: List<Product>,
-    categories:List<String>,
+    featured: List<ProductListModel>,
+    popularProducts: List<ProductListModel>,
+    categories:List<CategoriesListModel>,
     isLoading:Boolean = false,
     errorMessages:String? = null
 ) {
@@ -167,18 +175,27 @@ fun HomeContent(
             }
             if(categories.isNotEmpty()){
                 LazyRow {
-                    items(categories){category ->
-                        Text(
-                            text = category.replaceFirstChar { it.uppercase() },
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                                .clip(RoundedCornerShape(8.dp))
-                                .background(MaterialTheme.colorScheme.primary)
-                                .padding(8.dp)
-                        )
+                    items(categories ,
+                        key = {it.id}
+                    ){category ->
+
+                        val isVisible = remember { mutableStateOf(false) }
+                        LaunchedEffect(true) {
+                            isVisible.value = true
+                        }
+                        AnimatedVisibility(visible = isVisible.value, enter = fadeIn()+ expandVertically()) {
+                            Text(
+                                text = category.name,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier
+                                    .padding(horizontal = 8.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(MaterialTheme.colorScheme.primary)
+                                    .padding(8.dp)
+                            )
+                        }
                     }
                 }
                 Spacer(Modifier.size(16.dp))
@@ -225,7 +242,7 @@ fun SearchBar(value:String, onTextChanged:(String)->Unit){
 }
 
 @Composable
-fun HomeProductRow(products:List<Product>, title:String){
+fun HomeProductRow(products:List<ProductListModel>, title:String){
     Column {
         Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
             Text(
@@ -247,8 +264,14 @@ fun HomeProductRow(products:List<Product>, title:String){
         }
         Spacer(Modifier.size(8.dp))
         LazyRow {
-            items(products){ product ->
-                ProductItem(product)
+            items(products.take(8), key = {it.id}){ product ->
+                val isVisible = remember { mutableStateOf(false) }
+                LaunchedEffect(true) {
+                    isVisible.value = true
+                }
+                AnimatedVisibility(visible = isVisible.value, enter = fadeIn()+ expandVertically()) {
+                    ProductItem(product)
+                }
             }
         }
     }
@@ -256,7 +279,7 @@ fun HomeProductRow(products:List<Product>, title:String){
 
 
 @Composable
-fun ProductItem(product: Product){
+fun ProductItem(product: ProductListModel){
     Card(
         modifier = Modifier
             .padding(horizontal = 8.dp)
@@ -270,7 +293,7 @@ fun ProductItem(product: Product){
             modifier = Modifier.fillMaxSize()
         ) {
             AsyncImage(
-                model = product.image,
+                model = product.images[0],
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
