@@ -1,6 +1,6 @@
 package com.himanshu_kumar.domain.model
 
-data class Category(
+data class ProductCategory(
     val creationAt: String,
     val id: Int,
     val image: String,

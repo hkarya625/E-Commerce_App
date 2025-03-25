@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.himanshu_kumar.domain.model.CategoriesListModel
-import com.himanshu_kumar.domain.model.Category
-import com.himanshu_kumar.domain.model.Product
 import com.himanshu_kumar.domain.model.ProductListModel
 import com.himanshu_kumar.domain.network.ResultWrapper
 import com.himanshu_kumar.domain.usecase.GetCategoriesUserCase

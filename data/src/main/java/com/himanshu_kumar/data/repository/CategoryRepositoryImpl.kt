@@ -3,7 +3,6 @@ package com.himanshu_kumar.data.repository
 
 
 import com.himanshu_kumar.domain.model.CategoriesListModel
-import com.himanshu_kumar.domain.model.Category
 import com.himanshu_kumar.domain.network.NetworkService
 import com.himanshu_kumar.domain.network.ResultWrapper
 import com.himanshu_kumar.domain.repository.CategoryRepository

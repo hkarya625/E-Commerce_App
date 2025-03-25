@@ -18,7 +18,7 @@ data class ProductListResponse(
     val updatedAt: String
 ){
     fun toProductList() = ProductListModel(
-        category = category.id,
+        category = category.toProductCategory(),
         description = description,
         id = id,
         images = images,

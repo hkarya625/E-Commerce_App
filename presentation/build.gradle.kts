@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "1.8.0"
+    id("kotlin-parcelize")
 }
 
 android {
@@ -72,4 +73,6 @@ dependencies {
 
     implementation(libs.compose.navigation)
     implementation("io.coil-kt:coil-compose:2.7.0")             // used for load and display images from urls
+
+    implementation(libs.kotlinx.serialization.json)
 }

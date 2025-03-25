@@ -1,11 +1,8 @@
 package com.himanshu_kumar.data.network
 
-import com.himanshu_kumar.data.model.DataProductModel
 import com.himanshu_kumar.data.model.response.CategoriesListResponse
-import com.himanshu_kumar.domain.model.Category
 import com.himanshu_kumar.data.model.response.ProductListResponse
 import com.himanshu_kumar.domain.model.CategoriesListModel
-import com.himanshu_kumar.domain.model.Product
 import com.himanshu_kumar.domain.model.ProductListModel
 import com.himanshu_kumar.domain.network.NetworkService
 import com.himanshu_kumar.domain.network.ResultWrapper

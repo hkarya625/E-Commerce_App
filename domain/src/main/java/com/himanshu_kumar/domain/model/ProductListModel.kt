@@ -1,7 +1,7 @@
 package com.himanshu_kumar.domain.model
 
 data class ProductListModel(
-    val category: Int,
+    val category:ProductCategory,
     val description: String,
     val id: Int,
     val images: List<String>,

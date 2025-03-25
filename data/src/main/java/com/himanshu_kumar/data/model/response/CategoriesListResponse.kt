@@ -1,7 +1,6 @@
 package com.himanshu_kumar.data.model.response
 
 import com.himanshu_kumar.domain.model.CategoriesListModel
-import com.himanshu_kumar.domain.model.Category
 import kotlinx.serialization.Serializable
 
 @Serializable              // convert json object to kotlin and vice versa

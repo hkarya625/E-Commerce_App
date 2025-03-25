@@ -1,6 +1,5 @@
 package com.himanshu_kumar.data.repository
 
-import com.himanshu_kumar.domain.model.Product
 import com.himanshu_kumar.domain.model.ProductListModel
 import com.himanshu_kumar.domain.network.NetworkService
 import com.himanshu_kumar.domain.network.ResultWrapper

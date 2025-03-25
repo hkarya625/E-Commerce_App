@@ -25,8 +25,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.himanshu_kumar.shoppingapp.model.UiProductModel
+import com.himanshu_kumar.shoppingapp.navigation.CartScreen
+import com.himanshu_kumar.shoppingapp.navigation.HomeScreen
+import com.himanshu_kumar.shoppingapp.navigation.ProductDetails
+import com.himanshu_kumar.shoppingapp.navigation.ProfileScreen
+import com.himanshu_kumar.shoppingapp.navigation.productNavType
 import com.himanshu_kumar.shoppingapp.ui.feature.home.HomeScreen
 import com.himanshu_kumar.shoppingapp.ui.theme.ShoppingAppTheme
+import kotlin.reflect.typeOf
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,15 +55,21 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                             .padding(it)
                     ) {
-                        NavHost(navController = navController, startDestination = "home"){
-                            composable("home"){
+                        NavHost(navController = navController, startDestination = HomeScreen){
+                            composable<HomeScreen>{
                                 HomeScreen(navController)
                             }
-                            composable("cart"){
+                            composable<CartScreen>{
                                 Text(text = "Cart")
                             }
-                            composable("profile"){
+                            composable<ProfileScreen>{
                                 Text(text = "Profile")
+                            }
+                            composable<ProductDetails>(
+                                typeMap = mapOf(typeOf<UiProductModel>() to productNavType)
+                            ){
+                                val productRoute = it.toRoute<ProductDetails>()
+                                Text(text = productRoute.product.title)
                             }
                         }
                     }
@@ -76,8 +90,9 @@ fun BottomNavigationBar(navController: NavController){
         )
 
         items.forEach{ item->
+            val isSelected = currentRoute?.substringBefore("?") == item.route::class.qualifiedName
             NavigationBarItem(
-                selected = currentRoute == item.route,
+                selected = isSelected,
                 onClick = {
                     navController.navigate(item.route){
                         navController.graph.startDestinationRoute?.let { startRoute->
@@ -96,7 +111,7 @@ fun BottomNavigationBar(navController: NavController){
                     Image(
                         painter = painterResource(id = item.icon),
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(if(currentRoute == item.route) MaterialTheme.colorScheme.primary else Color.Gray)
+                        colorFilter = ColorFilter.tint(if(isSelected) MaterialTheme.colorScheme.primary else Color.Gray)
                         )
                 },
                 colors = NavigationBarItemDefaults.colors().copy(
@@ -109,8 +124,8 @@ fun BottomNavigationBar(navController: NavController){
         }
     }
 }
-sealed class BottomNavItem(val route:String, val title:String, val icon:Int){
-    object Home:BottomNavItem("home", "Home", icon = R.drawable.ic_home)
-    object Cart:BottomNavItem("cart", "Cart", icon = R.drawable.ic_cart)
-    object Profile:BottomNavItem("profile", "Profile", icon = R.drawable.ic_profile_br)
+sealed class BottomNavItem(val route:Any, val title:String, val icon:Int){
+    object Home:BottomNavItem(HomeScreen, "Home", icon = R.drawable.ic_home)
+    object Cart:BottomNavItem(CartScreen, "Cart", icon = R.drawable.ic_cart)
+    object Profile:BottomNavItem(ProfileScreen, "Profile", icon = R.drawable.ic_profile_br)
 }

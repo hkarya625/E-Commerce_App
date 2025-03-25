@@ -5,6 +5,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,10 +47,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.himanshu_kumar.domain.model.CategoriesListModel
-import com.himanshu_kumar.domain.model.Category
-import com.himanshu_kumar.domain.model.Product
+
 import com.himanshu_kumar.domain.model.ProductListModel
 import com.himanshu_kumar.shoppingapp.R
+import com.himanshu_kumar.shoppingapp.model.UiProductModel
+import com.himanshu_kumar.shoppingapp.navigation.ProductDetails
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -96,7 +98,10 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = koinView
                 popular.value,
                 categories.value,
                 loading.value,
-                error.value
+                error.value,
+                onClick = {
+                    navController.navigate(ProductDetails(UiProductModel.fromProduct(it)))
+                }
             )
         }
     }
@@ -149,7 +154,8 @@ fun HomeContent(
     popularProducts: List<ProductListModel>,
     categories:List<CategoriesListModel>,
     isLoading:Boolean = false,
-    errorMessages:String? = null
+    errorMessages:String? = null,
+    onClick:(ProductListModel)->Unit
 ) {
     LazyColumn {
         item {
@@ -178,7 +184,6 @@ fun HomeContent(
                     items(categories ,
                         key = {it.id}
                     ){category ->
-
                         val isVisible = remember { mutableStateOf(false) }
                         LaunchedEffect(true) {
                             isVisible.value = true
@@ -201,11 +206,11 @@ fun HomeContent(
                 Spacer(Modifier.size(16.dp))
             }
            if(featured.isNotEmpty()){
-               HomeProductRow(products = featured, title = "Featured")
+               HomeProductRow(products = featured, title = "Featured", onClick = onClick)
                Spacer(Modifier.size(16.dp))
            }
             if(popularProducts.isNotEmpty()){
-                HomeProductRow(products = popularProducts, title = "Popular Products")
+                HomeProductRow(products = popularProducts, title = "Popular Products", onClick = onClick)
             }
         }
     }
@@ -242,7 +247,7 @@ fun SearchBar(value:String, onTextChanged:(String)->Unit){
 }
 
 @Composable
-fun HomeProductRow(products:List<ProductListModel>, title:String){
+fun HomeProductRow(products:List<ProductListModel>, title:String, onClick:(ProductListModel)->Unit){
     Column {
         Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
             Text(
@@ -264,13 +269,16 @@ fun HomeProductRow(products:List<ProductListModel>, title:String){
         }
         Spacer(Modifier.size(8.dp))
         LazyRow {
-            items(products.take(8), key = {it.id}){ product ->
+            items(products, key = {it.id}){ product ->
                 val isVisible = remember { mutableStateOf(false) }
                 LaunchedEffect(true) {
                     isVisible.value = true
                 }
                 AnimatedVisibility(visible = isVisible.value, enter = fadeIn()+ expandVertically()) {
-                    ProductItem(product)
+                    ProductItem(
+                        product,
+                        onClick = onClick
+                    )
                 }
             }
         }
@@ -279,11 +287,12 @@ fun HomeProductRow(products:List<ProductListModel>, title:String){
 
 
 @Composable
-fun ProductItem(product: ProductListModel){
+fun ProductItem(product: ProductListModel, onClick:(ProductListModel)->Unit){
     Card(
         modifier = Modifier
             .padding(horizontal = 8.dp)
-            .size(width = 126.dp, height = 144.dp),
+            .size(width = 126.dp, height = 144.dp)
+            .clickable { onClick(product) },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.LightGray.copy(alpha = 0.3f)                                     // alpha -> transparency
