@@ -16,7 +16,7 @@ data class UiProductModel(
     val price:Int,
     val description:String,
     val images:List<String>
-):Parcelable{
+):Parcelable{                                                  // parcelable is used to pass data between screens
     companion object {
         fun fromProduct(product: ProductListModel) = UiProductModel(
             categoryId = product.category.id,
