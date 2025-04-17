@@ -1,5 +1,6 @@
 package com.himanshu_kumar.shoppingapp.di
 
+import com.himanshu_kumar.shoppingapp.ui.feature.cart.CartViewModel
 import com.himanshu_kumar.shoppingapp.ui.feature.home.HomeViewModel
 import com.himanshu_kumar.shoppingapp.ui.feature.product_details.ProductDetailsViewModel
 import org.koin.core.module.dsl.viewModel
@@ -13,7 +14,10 @@ val viewModelModule = module {
         )                    // Inject dependency into HomeViewModel
     }
     viewModel {
-        ProductDetailsViewModel()
+        ProductDetailsViewModel(get())
     }
 
+    viewModel {
+        CartViewModel(get())
+    }
 }

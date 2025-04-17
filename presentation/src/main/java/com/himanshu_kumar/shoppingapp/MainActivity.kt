@@ -36,6 +36,8 @@ import com.himanshu_kumar.shoppingapp.navigation.HomeScreen
 import com.himanshu_kumar.shoppingapp.navigation.ProductDetails
 import com.himanshu_kumar.shoppingapp.navigation.ProfileScreen
 import com.himanshu_kumar.shoppingapp.navigation.productNavType
+import com.himanshu_kumar.shoppingapp.ui.feature.cart.CartScreen
+
 import com.himanshu_kumar.shoppingapp.ui.feature.home.HomeScreen
 import com.himanshu_kumar.shoppingapp.ui.feature.product_details.ProductDetailsScreen
 import com.himanshu_kumar.shoppingapp.ui.theme.ShoppingAppTheme
@@ -69,7 +71,7 @@ class MainActivity : ComponentActivity() {
                                 shouldShowBottomBar.value = true
                             }
                             composable<CartScreen>{
-                                Text(text = "Cart")
+                                CartScreen(navController)
                                 shouldShowBottomBar.value = true
                             }
                             composable<ProfileScreen>{

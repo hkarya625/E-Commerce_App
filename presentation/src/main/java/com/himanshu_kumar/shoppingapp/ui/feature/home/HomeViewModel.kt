@@ -26,7 +26,7 @@ class HomeViewModel(
     private fun getAllProducts(){
         viewModelScope.launch {
             _uiState.value = HomeScreenUIEvents.Loading
-            val featured = getProducts(2)
+            val featured = getProducts(null)
             val popularProducts = getProducts(3)
             val categories = getCategories()
             if(featured.isEmpty() && popularProducts.isEmpty() && categories.isEmpty()){

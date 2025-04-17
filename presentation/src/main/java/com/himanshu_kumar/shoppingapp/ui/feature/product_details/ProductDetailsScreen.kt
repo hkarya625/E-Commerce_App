@@ -1,9 +1,11 @@
 package com.himanshu_kumar.shoppingapp.ui.feature.product_details
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,11 +20,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +50,57 @@ fun ProductDetailsScreen(
     product: UiProductModel,
     viewModel:ProductDetailsViewModel = koinViewModel()
 ) {
+
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ){
+        val uiState = viewModel.state.collectAsState()
+        val loading = remember { mutableStateOf(false) }
+        val error = remember { mutableStateOf<String?>(null) }
+
+        LaunchedEffect(uiState.value) {
+            when(uiState.value){
+                is ProductDetailsState.Success -> {
+                    loading.value = false
+                    Toast.makeText(
+                        navController.context,
+                        (uiState.value as ProductDetailsState.Success).message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                is ProductDetailsState.Error -> {
+                    loading.value = false
+                    Toast.makeText(
+                        navController.context,
+                        (uiState.value as ProductDetailsState.Success).message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                is ProductDetailsState.Loading -> {
+                    loading.value = true
+                }
+                else -> {
+                    loading.value = false
+                }
+            }
+        }
+        if(loading.value){
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.7f)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                CircularProgressIndicator()
+                Text(text = "Adding to cart...",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        }
+    }
+
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -146,13 +204,17 @@ fun ProductDetailsScreen(
                 modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
             ) {
                 Button(
-                    onClick = {}, modifier = Modifier.weight(1f).clip(RoundedCornerShape(5.dp))
+                    onClick = {
+                        viewModel.addProductToCart(product)
+                    }, modifier = Modifier.weight(1f).clip(RoundedCornerShape(5.dp))
                 ) {
                     Text(text = "Buy Now")
                 }
                 Spacer(Modifier.size(8.dp))
                 IconButton(
-                    onClick = {},
+                    onClick = {
+                        viewModel.addProductToCart(product)
+                    },
                     modifier = Modifier.padding(horizontal = 16.dp),
                     colors = IconButtonDefaults.iconButtonColors()
                         .copy(contentColor = Color.LightGray.copy(alpha = 0.4f))
