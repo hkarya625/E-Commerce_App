@@ -1,5 +1,6 @@
 package com.himanshu_kumar.data.network
 
+import android.util.Log
 import com.himanshu_kumar.data.model.request.AddToCartRequest
 import com.himanshu_kumar.data.model.response.CartItem
 import com.himanshu_kumar.data.model.response.CartResponse
@@ -60,6 +61,52 @@ class NetworkServiceImpl(private val client: HttpClient) : NetworkService {     
         )
     }
 
+
+    // for testing purpose only
+    private var fakeCart = CartModel(
+        data = listOf(
+            CartItemModel(
+                id = 1,
+                productId = 37,
+                userId = 123,
+                name = "Tom Cruise",
+                price = 33,
+                imageUrl = "https://i.imgur.com/9qrmE1b.jpeg",
+                quantity = 2,
+                productName = "Chic Summer Denim Espadrille Sandals"
+            ), CartItemModel(
+                id = 2,
+                productId = 40,
+                userId = 123,
+                name = "Tom Cruise",
+                price = 90,
+                imageUrl = "https://i.imgur.com/qNOjJje.jpeg",
+                quantity = 2,
+                productName = "Futuristic Silver and Gold High-Top Sneaker"
+            ),
+            CartItemModel(
+                id = 3,
+                productId = 14,
+                userId = 123,
+                name = "Tom Cruise",
+                price = 61,
+                imageUrl = "https://i.imgur.com/yVeIeDa.jpeg",
+                quantity = 2,
+                productName = "Classic Navy Blue Baseball Cap"
+            ),
+            CartItemModel(
+                id = 4,
+                productId = 49,
+                userId = 123,
+                name = "Tom Cruise",
+                price = 50,
+                imageUrl = "https://i.imgur.com/Lqaqz59.jpg",
+                quantity = 1,
+                productName = "Classic Navy Blue Baseball Cap"
+            )
+        ),
+        msg = "Product added to cart successfully"
+    )
     override suspend fun addProductToCart(request: AddCartRequestModel): ResultWrapper<CartModel> {
         val url = "$baseUrl/cart/1"
 //        return makeWebRequest(
@@ -70,69 +117,63 @@ class NetworkServiceImpl(private val client: HttpClient) : NetworkService {     
 //                cartItem.toCartModel()
 //            }
 //        )
+//        fakeCart = fakeCart.copy(
+//            data = fakeCart.data.
+//        )
+        return ResultWrapper.Success(fakeCart)
+    }
 
-        val fakeCart = CartModel(
-            data = listOf(
-                CartItemModel(
-                    id = 3,
-                    productId = 12,
-                    userId = 123,
-                    name = "Tom Cruise",
-                    price = 69,
-                    imageUrl = "https://i.imgur.com/yVeIeDa.jpeg",
-                    quantity = 2,
-                    productName = "Classic Heather Gray Hoodie"
-                )
-            ),
-            msg = "Product added to cart successfully"
+
+
+
+    override suspend fun getCart(): ResultWrapper<CartModel> {
+//        val url = "$baseUrl/cart/1"
+//        return makeWebRequest(
+//            url = url,
+//            method = HttpMethod.Get,
+//            mapper = { cartItem:CartResponse->
+//                cartItem.toCartModel()
+//            }
+//        )
+        return ResultWrapper.Success(fakeCart)
+    }
+
+    override suspend fun updateQuantity(cartItemModel: CartItemModel): ResultWrapper<CartModel> {
+//        val url = "$baseUrl/cart/1/${cartItemModel.id}"
+//        return makeWebRequest(
+//            url = url,
+//            method = HttpMethod.Put,
+//            body = AddToCartRequest(
+//                productId = cartItemModel.productId,
+//                productName = cartItemModel.productName,
+//                price = cartItemModel.price,
+//                quantity = cartItemModel.quantity,
+//                userId = cartItemModel.userId
+//            ),
+//            mapper = { cartItem:CartResponse->
+//                cartItem.toCartModel()
+//            }
+//        )
+        fakeCart =   fakeCart.copy(
+            data = fakeCart.data.mapIndexed { _, item ->
+                if (item.id == cartItemModel.id) item.copy(quantity = cartItemModel.quantity)
+                else item
+            }
         )
         return ResultWrapper.Success(fakeCart)
     }
 
-    override suspend fun getCart(): ResultWrapper<CartModel> {
-        val fakeCart = CartModel(
-            data = listOf(
-                CartItemModel(
-                    id = 1,
-                    productId = 37,
-                    userId = 123,
-                    name = "Tom Cruise",
-                    price = 33,
-                    imageUrl = "https://i.imgur.com/9qrmE1b.jpeg",
-                    quantity = 2,
-                    productName = "Chic Summer Denim Espadrille Sandals"
-                ), CartItemModel(
-                    id = 2,
-                    productId = 40,
-                    userId = 123,
-                    name = "Tom Cruise",
-                    price = 90,
-                    imageUrl = "https://i.imgur.com/qNOjJje.jpeg",
-                    quantity = 2,
-                    productName = "Futuristic Silver and Gold High-Top Sneaker"
-                ),
-                CartItemModel(
-                    id = 3,
-                    productId = 14,
-                    userId = 123,
-                    name = "Tom Cruise",
-                    price = 61,
-                    imageUrl = "https://i.imgur.com/yVeIeDa.jpeg",
-                    quantity = 2,
-                    productName = "Classic Navy Blue Baseball Cap"
-                ),
-                CartItemModel(
-                    id = 4,
-                    productId = 49,
-                    userId = 123,
-                    name = "Tom Cruise",
-                    price = 50,
-                    imageUrl = "https://i.imgur.com/Lqaqz59.jpg",
-                    quantity = 1,
-                    productName = "Classic Navy Blue Baseball Cap"
-                )
-            ),
-            msg = "Product added to cart successfully"
+    override suspend fun deleteItem(userId: Int, cartItemId: Int): ResultWrapper<CartModel> {
+//        val url = "$baseUrl/cart/$userId/$cartItemId"
+//        return makeWebRequest(
+//            url = url,
+//            method = HttpMethod.Delete,
+//            mapper = { cartItem:CartResponse->
+//                cartItem.toCartModel()
+//            }
+//        )
+        fakeCart =   fakeCart.copy(
+            data = fakeCart.data.filter { it.id != cartItemId }
         )
         return ResultWrapper.Success(fakeCart)
     }

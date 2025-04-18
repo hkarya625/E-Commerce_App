@@ -1,5 +1,6 @@
 package com.himanshu_kumar.domain.network
 
+import com.himanshu_kumar.domain.model.CartItemModel
 import com.himanshu_kumar.domain.model.CartModel
 import com.himanshu_kumar.domain.model.CategoriesListModel
 
@@ -11,6 +12,8 @@ interface NetworkService{
     suspend fun getCategories():ResultWrapper<List<CategoriesListModel>>
     suspend fun addProductToCart(request: AddCartRequestModel):ResultWrapper<CartModel>
     suspend fun getCart():ResultWrapper<CartModel>
+    suspend fun updateQuantity(cartItemModel: CartItemModel):ResultWrapper<CartModel>
+    suspend fun deleteItem(userId:Int, cartItemId:Int):ResultWrapper<CartModel>
 }
 
 sealed class ResultWrapper<out T> {

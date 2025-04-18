@@ -113,7 +113,12 @@ fun CartScreen(
                 ) {
                     LazyColumn {
                         items(cartItems.value){item->
-                            CartItem(item)
+                            CartItem(
+                                item,
+                                onIncrement = { viewModel.incrementQuantity(it) },
+                                onDecrement = { viewModel.decrementQuantity(it) },
+                                onRemove = { viewModel.removeItem(it) }
+                            )
                         }
                     }
                 }
@@ -121,7 +126,9 @@ fun CartScreen(
                 {
                     Button(onClick = {
 
-                    }, modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+                    }, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp)) {
                         Text(text = "Checkout")
                     }
                 }
@@ -142,7 +149,12 @@ fun CartScreen(
 }
 
 @Composable
-fun CartItem(item:CartItemModel){
+fun CartItem(
+    item:CartItemModel,
+    onIncrement:(CartItemModel) ->Unit,
+    onDecrement:(CartItemModel) ->Unit,
+    onRemove:(CartItemModel) ->Unit
+){
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -158,23 +170,28 @@ fun CartItem(item:CartItemModel){
         )
         Spacer(modifier = Modifier.size(8.dp))
         Column(
-            modifier = Modifier.weight(1f).fillMaxHeight()
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center
         ) {
             Spacer(modifier = Modifier.size(8.dp))
             Text(
                 text = item.productName,
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium)
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium)
             )
             Spacer(modifier = Modifier.size(4.dp))
             Text(
                 text = "$ ${item.price}",
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
                 color = MaterialTheme.colorScheme.primary
             )
         }
         Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.End) {
             IconButton(
-                onClick = {}
+                onClick = {
+                    onRemove(item)
+                }
             ) {
                 Image(painter = painterResource(id = R.drawable.ic_delete), contentDescription = null)
             }
@@ -182,13 +199,17 @@ fun CartItem(item:CartItemModel){
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
-                    onClick = {}
+                    onClick = {
+                        onIncrement(item)
+                    }
                 ) {
                     Image(painter = painterResource(id = R.drawable.ic_add), contentDescription = null)
                 }
                 Text(text = "${item.quantity}")
                 IconButton(
-                    onClick = {}
+                    onClick = {
+                        onDecrement(item)
+                    }
                 ) {
                     Image(painter = painterResource(id = R.drawable.ic_subtract), contentDescription = null)
                 }
