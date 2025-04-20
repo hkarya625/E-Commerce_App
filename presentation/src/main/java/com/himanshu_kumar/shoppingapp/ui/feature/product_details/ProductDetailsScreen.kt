@@ -219,7 +219,7 @@ fun ProductDetailsScreen(
                         .copy(contentColor = Color.LightGray.copy(alpha = 0.4f))
 
                 ) {
-                    Image(painter = painterResource(id = R.drawable.ic_cart), contentDescription = null)
+                    Image(painter = painterResource(id = R.drawable.ic_order), contentDescription = null)
                 }
             }
         }

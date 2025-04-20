@@ -10,6 +10,9 @@ object HomeScreen
 object CartScreen
 
 @Serializable
+object OrdersScreen
+
+@Serializable
 object ProfileScreen
 
 @Serializable

@@ -6,6 +6,7 @@ import com.himanshu_kumar.domain.usecase.DeleteProductUseCase
 import com.himanshu_kumar.domain.usecase.GetCartUseCase
 import com.himanshu_kumar.domain.usecase.GetCategoriesUserCase
 import com.himanshu_kumar.domain.usecase.GetProductUseCase
+import com.himanshu_kumar.domain.usecase.OrderListUseCase
 import com.himanshu_kumar.domain.usecase.PlaceOrderUseCase
 import com.himanshu_kumar.domain.usecase.UpdateQuantityUseCase
 import org.koin.dsl.module
@@ -19,4 +20,5 @@ val useCaseModule = module {                   // a container where we define wh
     factory { DeleteProductUseCase(get()) }
     factory { CartSummaryUseCase(get()) }
     factory { PlaceOrderUseCase(get()) }
+    factory { OrderListUseCase(get()) }
 }

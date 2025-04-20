@@ -5,6 +5,8 @@ import com.himanshu_kumar.data.model.request.AddressOrderModel
 import com.himanshu_kumar.data.model.response.CartItem
 import com.himanshu_kumar.data.model.response.CartSummaryResponse
 import com.himanshu_kumar.data.model.response.CategoriesListResponse
+import com.himanshu_kumar.data.model.response.OrderListData
+import com.himanshu_kumar.data.model.response.OrdersListResponse
 import com.himanshu_kumar.data.model.response.PlaceOrderResponse
 import com.himanshu_kumar.data.model.response.ProductListResponse
 import com.himanshu_kumar.data.model.response.Summary
@@ -13,6 +15,9 @@ import com.himanshu_kumar.domain.model.CartItemModel
 import com.himanshu_kumar.domain.model.CartModel
 import com.himanshu_kumar.domain.model.CartSummary
 import com.himanshu_kumar.domain.model.CategoriesListModel
+import com.himanshu_kumar.domain.model.OrderProductItem
+import com.himanshu_kumar.domain.model.OrdersData
+import com.himanshu_kumar.domain.model.OrdersListModel
 import com.himanshu_kumar.domain.model.ProductListModel
 import com.himanshu_kumar.domain.model.request.AddCartRequestModel
 import com.himanshu_kumar.domain.network.NetworkService
@@ -217,6 +222,59 @@ class NetworkServiceImpl(private val client: HttpClient) : NetworkService {     
 //            }
 //        )
         return ResultWrapper.Success(12345)
+    }
+
+    override suspend fun getOrderList(): ResultWrapper<OrdersListModel> {
+//        val url = "$baseUrl/orders/1"
+//        return makeWebRequest(
+//            url = url,
+//            method = HttpMethod.Get,
+//            mapper = { orderResponse: OrdersListResponse ->
+//                orderResponse.toDomainResponse()
+//            }
+//        )
+        val data = OrdersListModel(
+            data = listOf(
+                OrdersData(
+                    id = 1,
+                    items = listOf(
+                        OrderProductItem(
+                            id = 1,
+                            orderId = 12,
+                            price = 59.0,
+                            productId = 37,
+                            productName = "Chic Summer Denim Espadrille Sandals",
+                            quantity = 2,
+                            userId = 123
+                        )
+                    ),
+                    orderDate = "2024-10-12",
+                    status = "Pending",
+                    totalAmount = 1200.0,
+                    userId = 123
+                ),
+                OrdersData(
+                    id = 2,
+                    items = listOf(
+                        OrderProductItem(
+                            id = 2,
+                            orderId = 13,
+                            price = 60.0,
+                            productId = 79,
+                            productName = "Classic Comfort Drawstring Joggers",
+                            quantity = 2,
+                            userId = 123
+                        )
+                    ),
+                    orderDate = "2024-10-15",
+                    status = "Pending",
+                    totalAmount = 1000.0,
+                    userId = 123
+                )
+            ),
+            msg = "OrderList"
+        )
+        return ResultWrapper.Success(data)
     }
 
     private fun testing(item:List<CartItemModel>):Pair<List<CartItem>,Double>{

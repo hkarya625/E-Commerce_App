@@ -33,6 +33,7 @@ import com.himanshu_kumar.shoppingapp.model.UiProductModel
 import com.himanshu_kumar.shoppingapp.navigation.CartScreen
 import com.himanshu_kumar.shoppingapp.navigation.CartSummaryScreen
 import com.himanshu_kumar.shoppingapp.navigation.HomeScreen
+import com.himanshu_kumar.shoppingapp.navigation.OrdersScreen
 import com.himanshu_kumar.shoppingapp.navigation.ProductDetails
 import com.himanshu_kumar.shoppingapp.navigation.ProfileScreen
 import com.himanshu_kumar.shoppingapp.navigation.UserAddressRoute
@@ -42,6 +43,7 @@ import com.himanshu_kumar.shoppingapp.navigation.userAddressNavType
 import com.himanshu_kumar.shoppingapp.ui.feature.cart.CartScreen
 
 import com.himanshu_kumar.shoppingapp.ui.feature.home.HomeScreen
+import com.himanshu_kumar.shoppingapp.ui.feature.orders.OrdersScreen
 import com.himanshu_kumar.shoppingapp.ui.feature.product_details.ProductDetailsScreen
 import com.himanshu_kumar.shoppingapp.ui.feature.summary.CartSummaryScreen
 import com.himanshu_kumar.shoppingapp.ui.feature.user_address.UserAddressScreen
@@ -78,6 +80,10 @@ class MainActivity : ComponentActivity() {
                             composable<CartScreen>{
                                 CartScreen(navController)
                                 shouldShowBottomBar.value = true
+                            }
+                            composable<OrdersScreen>{
+                                shouldShowBottomBar.value = true
+                                OrdersScreen()
                             }
                             composable<ProfileScreen>{
                                 Text(text = "Profile")
@@ -118,7 +124,7 @@ fun BottomNavigationBar(navController: NavController){
         val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
         val items = listOf(
             BottomNavItem.Home,
-            BottomNavItem.Cart,
+            BottomNavItem.Orders,
             BottomNavItem.Profile
         )
 
@@ -158,7 +164,8 @@ fun BottomNavigationBar(navController: NavController){
     }
 }
 sealed class BottomNavItem(val route:Any, val title:String, val icon:Int){
-    object Home:BottomNavItem(HomeScreen, "Home", icon = R.drawable.ic_home)
-    object Cart:BottomNavItem(CartScreen, "Cart", icon = R.drawable.ic_cart)
-    object Profile:BottomNavItem(ProfileScreen, "Profile", icon = R.drawable.ic_profile_br)
+    data object Home:BottomNavItem(HomeScreen, "Home", icon = R.drawable.ic_home)
+//    data object Cart:BottomNavItem(CartScreen, "Cart", icon = R.drawable.ic_cart)
+    data object Orders:BottomNavItem(OrdersScreen, "Orders", icon = R.drawable.ic_order)
+    data object Profile:BottomNavItem(ProfileScreen, "Profile", icon = R.drawable.ic_profile_br)
 }

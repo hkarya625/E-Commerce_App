@@ -5,6 +5,7 @@ import com.himanshu_kumar.domain.model.CartItemModel
 import com.himanshu_kumar.domain.model.CartModel
 import com.himanshu_kumar.domain.model.CartSummary
 import com.himanshu_kumar.domain.model.CategoriesListModel
+import com.himanshu_kumar.domain.model.OrdersListModel
 
 import com.himanshu_kumar.domain.model.ProductListModel
 import com.himanshu_kumar.domain.model.request.AddCartRequestModel
@@ -18,6 +19,7 @@ interface NetworkService{
     suspend fun deleteItem(userId:Int, cartItemId:Int):ResultWrapper<CartModel>
     suspend fun getCartSummary(userId:Int):ResultWrapper<CartSummary>
     suspend fun placeOrder(address: AddressDomainModel, userId:Int):ResultWrapper<Long>
+    suspend fun getOrderList():ResultWrapper<OrdersListModel>
 }
 
 sealed class ResultWrapper<out T> {
