@@ -44,6 +44,7 @@ import coil.compose.AsyncImage
 import com.himanshu_kumar.domain.model.CartItemModel
 import com.himanshu_kumar.shoppingapp.R
 import com.himanshu_kumar.shoppingapp.navigation.CartScreen
+import com.himanshu_kumar.shoppingapp.navigation.CartSummaryScreen
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
@@ -125,10 +126,11 @@ fun CartScreen(
                 if(shouldShowList)
                 {
                     Button(onClick = {
-
+                        navController.navigate(CartSummaryScreen)
                     }, modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 8.dp)) {
+                        .padding(horizontal = 8.dp)
+                        .align(Alignment.CenterHorizontally)) {
                         Text(text = "Checkout")
                     }
                 }

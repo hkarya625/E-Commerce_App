@@ -1,5 +1,6 @@
 package com.himanshu_kumar.shoppingapp.ui.feature.product_details
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.himanshu_kumar.domain.model.request.AddCartRequestModel
@@ -24,6 +25,7 @@ class ProductDetailsViewModel(private val useCase: AddToCartUseCase):ViewModel()
                     userId = 1,
                 )
             )
+            Log.d("fakeCart",result.toString())
             when(result){
                 is ResultWrapper.Success -> {
                     _state.value = ProductDetailsState.Success("Product added to cart successfully")

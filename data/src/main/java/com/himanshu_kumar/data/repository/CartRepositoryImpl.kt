@@ -2,6 +2,7 @@ package com.himanshu_kumar.data.repository
 
 import com.himanshu_kumar.domain.model.CartItemModel
 import com.himanshu_kumar.domain.model.CartModel
+import com.himanshu_kumar.domain.model.CartSummary
 import com.himanshu_kumar.domain.model.request.AddCartRequestModel
 import com.himanshu_kumar.domain.network.NetworkService
 import com.himanshu_kumar.domain.network.ResultWrapper
@@ -22,5 +23,9 @@ class CartRepositoryImpl(private val networkService: NetworkService) : CartRepos
 
     override suspend fun deleteItem(userId: Int, cartItemId: Int): ResultWrapper<CartModel> {
         return networkService.deleteItem(userId, cartItemId)
+    }
+
+    override suspend fun getSummary(userId: Int): ResultWrapper<CartSummary> {
+        return networkService.getCartSummary(userId)
     }
 }

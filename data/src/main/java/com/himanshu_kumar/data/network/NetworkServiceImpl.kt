@@ -1,13 +1,17 @@
 package com.himanshu_kumar.data.network
 
 import android.util.Log
-import com.himanshu_kumar.data.model.request.AddToCartRequest
+import com.himanshu_kumar.data.model.request.AddressOrderModel
 import com.himanshu_kumar.data.model.response.CartItem
-import com.himanshu_kumar.data.model.response.CartResponse
+import com.himanshu_kumar.data.model.response.CartSummaryResponse
 import com.himanshu_kumar.data.model.response.CategoriesListResponse
+import com.himanshu_kumar.data.model.response.PlaceOrderResponse
 import com.himanshu_kumar.data.model.response.ProductListResponse
+import com.himanshu_kumar.data.model.response.Summary
+import com.himanshu_kumar.domain.model.AddressDomainModel
 import com.himanshu_kumar.domain.model.CartItemModel
 import com.himanshu_kumar.domain.model.CartModel
+import com.himanshu_kumar.domain.model.CartSummary
 import com.himanshu_kumar.domain.model.CategoriesListModel
 import com.himanshu_kumar.domain.model.ProductListModel
 import com.himanshu_kumar.domain.model.request.AddCartRequestModel
@@ -24,7 +28,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
 import io.ktor.http.contentType
-import io.ktor.util.InternalAPI
 import io.ktor.utils.io.errors.IOException
 
 
@@ -74,39 +77,24 @@ class NetworkServiceImpl(private val client: HttpClient) : NetworkService {     
                 imageUrl = "https://i.imgur.com/9qrmE1b.jpeg",
                 quantity = 2,
                 productName = "Chic Summer Denim Espadrille Sandals"
-            ), CartItemModel(
+            ),
+            CartItemModel(
                 id = 2,
-                productId = 40,
+                productId = 7,
                 userId = 123,
                 name = "Tom Cruise",
-                price = 90,
-                imageUrl = "https://i.imgur.com/qNOjJje.jpeg",
-                quantity = 2,
-                productName = "Futuristic Silver and Gold High-Top Sneaker"
-            ),
-            CartItemModel(
-                id = 3,
-                productId = 14,
-                userId = 123,
-                name = "Tom Cruise",
-                price = 61,
-                imageUrl = "https://i.imgur.com/yVeIeDa.jpeg",
-                quantity = 2,
-                productName = "Classic Navy Blue Baseball Cap"
-            ),
-            CartItemModel(
-                id = 4,
-                productId = 49,
-                userId = 123,
-                name = "Tom Cruise",
-                price = 50,
-                imageUrl = "https://i.imgur.com/Lqaqz59.jpg",
+                price = 79,
+                imageUrl = "https://i.imgur.com/mp3rUty.jpeg",
                 quantity = 1,
-                productName = "Classic Navy Blue Baseball Cap"
+                productName = "Classic Comfort Drawstring Joggers"
             )
         ),
         msg = "Product added to cart successfully"
     )
+//    private var fakeCart:CartModel = CartModel(
+//        data = emptyList(),
+//        msg = "empty list"
+//    )
     override suspend fun addProductToCart(request: AddCartRequestModel): ResultWrapper<CartModel> {
         val url = "$baseUrl/cart/1"
 //        return makeWebRequest(
@@ -120,6 +108,21 @@ class NetworkServiceImpl(private val client: HttpClient) : NetworkService {     
 //        fakeCart = fakeCart.copy(
 //            data = fakeCart.data.
 //        )
+        val newItem = CartItemModel(
+            id = fakeCart.data.size + 1,
+            productId = request.productId,
+            userId = request.userId,
+            name = "",
+            price = request.price,
+            imageUrl = null,
+            quantity =  request.quantity,
+            productName = request.productName,
+        )
+        val updatedData = fakeCart.data + newItem  // creates a new list with the new item
+        fakeCart = fakeCart.copy(
+            data = updatedData,
+            msg = "Product added to cart successfully"
+        )
         return ResultWrapper.Success(fakeCart)
     }
 
@@ -135,6 +138,7 @@ class NetworkServiceImpl(private val client: HttpClient) : NetworkService {     
 //                cartItem.toCartModel()
 //            }
 //        )
+        Log.d("fakeCart",fakeCart.toString())
         return ResultWrapper.Success(fakeCart)
     }
 
@@ -177,6 +181,61 @@ class NetworkServiceImpl(private val client: HttpClient) : NetworkService {     
         )
         return ResultWrapper.Success(fakeCart)
     }
+
+    override suspend fun getCartSummary(userId: Int): ResultWrapper<CartSummary> {
+//        val url = "$baseUrl/cart/$userId/summary"
+//        return makeWebRequest(
+//            url = url,
+//            method = HttpMethod.Get,
+//            mapper = { cartSummary: CartSummaryResponse ->
+//                cartSummary.toCartSummary()
+//            }
+//        )
+        val fakeSummaryData = CartSummaryResponse(
+            data = Summary(
+                discount = 49.95,
+                items = testing(fakeCart.data).first,
+                shipping = 5.0,
+                subtotal = testing(fakeCart.data).second,
+                tax = 99.9,
+                total = testing(fakeCart.data).second+5.0+99.9-49.95
+            ),
+            msg = "Checkout Summary"
+        ).toCartSummary()
+        return ResultWrapper.Success(fakeSummaryData)
+    }
+
+    override suspend fun placeOrder(address: AddressDomainModel, userId: Int): ResultWrapper<Long> {
+//        val dataModel = AddressOrderModel.fromDomainAddress(address)
+//        val url = "$baseUrl/orders/$userId"
+//        return makeWebRequest(
+//            url = url,
+//            method = HttpMethod.Post,
+//            body = dataModel,
+//            mapper = { orderRes: PlaceOrderResponse ->
+//                orderRes.data.id
+//            }
+//        )
+        return ResultWrapper.Success(12345)
+    }
+
+    private fun testing(item:List<CartItemModel>):Pair<List<CartItem>,Double>{
+        val list:List<CartItem> = item.map{
+            CartItem(
+                id = it.id,
+                productId = it.productId,
+                productName = it.productName,
+                price = it.price,
+                userId = it.userId,
+                name = it.name,
+                imageUrl = null,
+                quantity = it.quantity,
+            )
+        }
+        val total = item.sumOf { it.price * it.quantity }.toDouble()
+        return Pair(list,total)
+    }
+
 
     // Opt-in to use internal Ktor APIs (use with caution).
     private suspend inline fun <reified T, R> makeWebRequest(

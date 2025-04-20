@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,14 +31,20 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.himanshu_kumar.shoppingapp.model.UiProductModel
 import com.himanshu_kumar.shoppingapp.navigation.CartScreen
+import com.himanshu_kumar.shoppingapp.navigation.CartSummaryScreen
 import com.himanshu_kumar.shoppingapp.navigation.HomeScreen
 import com.himanshu_kumar.shoppingapp.navigation.ProductDetails
 import com.himanshu_kumar.shoppingapp.navigation.ProfileScreen
+import com.himanshu_kumar.shoppingapp.navigation.UserAddressRoute
+import com.himanshu_kumar.shoppingapp.navigation.UserAddressWrapper
 import com.himanshu_kumar.shoppingapp.navigation.productNavType
+import com.himanshu_kumar.shoppingapp.navigation.userAddressNavType
 import com.himanshu_kumar.shoppingapp.ui.feature.cart.CartScreen
 
 import com.himanshu_kumar.shoppingapp.ui.feature.home.HomeScreen
 import com.himanshu_kumar.shoppingapp.ui.feature.product_details.ProductDetailsScreen
+import com.himanshu_kumar.shoppingapp.ui.feature.summary.CartSummaryScreen
+import com.himanshu_kumar.shoppingapp.ui.feature.user_address.UserAddressScreen
 import com.himanshu_kumar.shoppingapp.ui.theme.ShoppingAppTheme
 import kotlin.reflect.typeOf
 
@@ -84,6 +89,20 @@ class MainActivity : ComponentActivity() {
                                 shouldShowBottomBar.value = false
                                 val productRoute = it.toRoute<ProductDetails>()
                                 ProductDetailsScreen(navController, productRoute.product)
+                            }
+                            composable<UserAddressRoute>(
+                                typeMap = mapOf(typeOf<UserAddressWrapper>() to userAddressNavType)   // passing object as argument
+                            ){
+                                shouldShowBottomBar.value = false
+                                val userAddressRoute = it.toRoute<UserAddressRoute>()                    // passed data
+                                UserAddressScreen(
+                                    navController = navController,
+                                    userAddress = userAddressRoute.userAddressWrapper.userAddress
+                                )
+                            }
+                            composable<CartSummaryScreen>{
+                                shouldShowBottomBar.value = false
+                                CartSummaryScreen(navController)
                             }
                         }
                     }
