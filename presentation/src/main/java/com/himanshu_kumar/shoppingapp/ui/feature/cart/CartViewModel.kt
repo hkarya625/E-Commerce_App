@@ -8,6 +8,7 @@ import com.himanshu_kumar.domain.network.ResultWrapper
 import com.himanshu_kumar.domain.usecase.DeleteProductUseCase
 import com.himanshu_kumar.domain.usecase.GetCartUseCase
 import com.himanshu_kumar.domain.usecase.UpdateQuantityUseCase
+import com.himanshu_kumar.shoppingapp.AppSession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -15,9 +16,13 @@ class CartViewModel(
     private val cartUseCase: GetCartUseCase,
     private val updateQuantityUseCase: UpdateQuantityUseCase,
     private val deleteItemUseCase: DeleteProductUseCase
-    ) : ViewModel() {
+) : ViewModel()
+{
+
     private val _uiState = MutableStateFlow<CartEvent>(CartEvent.Loading)
     val uiState = _uiState
+
+    val userId = AppSession.getUser().toLong()
 
     init {
         getCart()
@@ -25,7 +30,7 @@ class CartViewModel(
     fun getCart(){
         viewModelScope.launch {
             _uiState.value = CartEvent.Loading
-            cartUseCase.execute().let { result->
+            cartUseCase.execute(userId).let { result->
                 when(result){
                     is ResultWrapper.Success->{
                         _uiState.value = CartEvent.Success(result.value.data)
@@ -49,7 +54,7 @@ class CartViewModel(
     private fun updateQuantity(cartItem: CartItemModel){
         viewModelScope.launch {
             _uiState.value = CartEvent.Loading
-            when(val result = updateQuantityUseCase.execute(cartItem)){
+            when(val result = updateQuantityUseCase.execute(cartItem, userId)){
                 is ResultWrapper.Success->{
                     _uiState.value = CartEvent.Success(result.value.data)
                 }
@@ -62,7 +67,7 @@ class CartViewModel(
     fun removeItem(cartItem: CartItemModel){
         viewModelScope.launch {
             _uiState.value = CartEvent.Loading
-            when(val result = deleteItemUseCase.execute(cartItem.userId, cartItem.id)){
+            when(val result = deleteItemUseCase.execute(cartItem.id, userId )){
                 is ResultWrapper.Success-> {
                     _uiState.value = CartEvent.Success(result.value.data)
                 }

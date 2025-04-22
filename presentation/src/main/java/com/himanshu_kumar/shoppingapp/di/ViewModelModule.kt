@@ -1,5 +1,7 @@
 package com.himanshu_kumar.shoppingapp.di
 
+import com.himanshu_kumar.shoppingapp.ui.feature.authentication.login.LoginViewModel
+import com.himanshu_kumar.shoppingapp.ui.feature.authentication.register.RegisterViewModel
 import com.himanshu_kumar.shoppingapp.ui.feature.cart.CartViewModel
 import com.himanshu_kumar.shoppingapp.ui.feature.home.HomeViewModel
 import com.himanshu_kumar.shoppingapp.ui.feature.orders.OrdersViewModel
@@ -14,5 +16,7 @@ val viewModelModule = module {
     viewModel { CartViewModel(get(), get(), get()) }
     viewModel { CartSummaryViewModel(get(), get ()) }
     viewModel { OrdersViewModel(get()) }
+    viewModel { LoginViewModel(get()) }
+    viewModel { RegisterViewModel(get()) }
 
 }

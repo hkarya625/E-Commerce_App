@@ -33,13 +33,17 @@ import com.himanshu_kumar.shoppingapp.model.UiProductModel
 import com.himanshu_kumar.shoppingapp.navigation.CartScreen
 import com.himanshu_kumar.shoppingapp.navigation.CartSummaryScreen
 import com.himanshu_kumar.shoppingapp.navigation.HomeScreen
+import com.himanshu_kumar.shoppingapp.navigation.LoginScreen
 import com.himanshu_kumar.shoppingapp.navigation.OrdersScreen
 import com.himanshu_kumar.shoppingapp.navigation.ProductDetails
 import com.himanshu_kumar.shoppingapp.navigation.ProfileScreen
+import com.himanshu_kumar.shoppingapp.navigation.RegisterScreen
 import com.himanshu_kumar.shoppingapp.navigation.UserAddressRoute
 import com.himanshu_kumar.shoppingapp.navigation.UserAddressWrapper
 import com.himanshu_kumar.shoppingapp.navigation.productNavType
 import com.himanshu_kumar.shoppingapp.navigation.userAddressNavType
+import com.himanshu_kumar.shoppingapp.ui.feature.authentication.login.LoginScreen
+import com.himanshu_kumar.shoppingapp.ui.feature.authentication.register.RegisterScreen
 import com.himanshu_kumar.shoppingapp.ui.feature.cart.CartScreen
 
 import com.himanshu_kumar.shoppingapp.ui.feature.home.HomeScreen
@@ -56,7 +60,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ShoppingAppTheme {
-                val shouldShowBottomBar = remember{ mutableStateOf(true) }
+                val shouldShowBottomBar = remember{ mutableStateOf(false) }
                 val navController = rememberNavController()
                 Scaffold(
                     modifier = Modifier
@@ -72,22 +76,35 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                             .padding(it)
                     ) {
-                        NavHost(navController = navController, startDestination = HomeScreen){
+                        NavHost(
+                            navController = navController,
+                            startDestination = if (AppSession.getUser() != 0) HomeScreen else LoginScreen
+                        ) {
+
+                            composable<RegisterScreen>{
+                                shouldShowBottomBar.value = false
+                                RegisterScreen(navController)
+                            }
+
+                            composable<LoginScreen>{
+                                shouldShowBottomBar.value = false
+                                LoginScreen(navController)
+                            }
                             composable<HomeScreen>{
-                                HomeScreen(navController)
                                 shouldShowBottomBar.value = true
+                                HomeScreen(navController)
                             }
                             composable<CartScreen>{
-                                CartScreen(navController)
                                 shouldShowBottomBar.value = true
+                                CartScreen(navController)
                             }
                             composable<OrdersScreen>{
                                 shouldShowBottomBar.value = true
                                 OrdersScreen()
                             }
                             composable<ProfileScreen>{
-                                Text(text = "Profile")
                                 shouldShowBottomBar.value = true
+                                Text(text = "Profile")
                             }
                             composable<ProductDetails>(
                                 typeMap = mapOf(typeOf<UiProductModel>() to productNavType)

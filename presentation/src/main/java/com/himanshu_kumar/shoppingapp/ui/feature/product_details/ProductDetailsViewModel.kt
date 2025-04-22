@@ -6,13 +6,18 @@ import androidx.lifecycle.viewModelScope
 import com.himanshu_kumar.domain.model.request.AddCartRequestModel
 import com.himanshu_kumar.domain.network.ResultWrapper
 import com.himanshu_kumar.domain.usecase.AddToCartUseCase
+import com.himanshu_kumar.shoppingapp.AppSession
 import com.himanshu_kumar.shoppingapp.model.UiProductModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class ProductDetailsViewModel(private val useCase: AddToCartUseCase):ViewModel() {
+
+
     private val _state = MutableStateFlow<ProductDetailsState>(ProductDetailsState.Nothing)
     val state = _state
+
+    val userId = AppSession.getUser()
     fun addProductToCart(product: UiProductModel) {
         viewModelScope.launch {
             _state.value = ProductDetailsState.Loading
@@ -22,8 +27,9 @@ class ProductDetailsViewModel(private val useCase: AddToCartUseCase):ViewModel()
                     productName = product.title,
                     price = product.price,
                     quantity = 1,
-                    userId = 1,
-                )
+                    userId = userId,
+                ),
+                userId = userId.toLong()
             )
             Log.d("fakeCart",result.toString())
             when(result){

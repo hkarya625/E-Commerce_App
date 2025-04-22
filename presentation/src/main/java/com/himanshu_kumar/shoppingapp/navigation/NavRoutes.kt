@@ -3,6 +3,13 @@ package com.himanshu_kumar.shoppingapp.navigation
 import com.himanshu_kumar.shoppingapp.model.UiProductModel
 import kotlinx.serialization.Serializable
 
+
+@Serializable
+object LoginScreen
+
+@Serializable
+object RegisterScreen
+
 @Serializable
 object HomeScreen
 
