@@ -286,6 +286,42 @@ class NetworkServiceImpl(private val client: HttpClient) : NetworkService {     
                     status = "Pending",
                     totalAmount = 1000.0,
                     userId = 123
+                ),
+                OrdersData(
+                    id = 3,
+                    items = listOf(
+                        OrderProductItem(
+                            id = 2,
+                            orderId = 13,
+                            price = 60.0,
+                            productId = 79,
+                            productName = "Shoes",
+                            quantity = 2,
+                            userId = 123
+                        )
+                    ),
+                    orderDate = "2024-11-01",
+                    status = "Cancelled",
+                    totalAmount = 645.0,
+                    userId = 123
+                ),
+                OrdersData(
+                    id = 4,
+                    items = listOf(
+                        OrderProductItem(
+                            id = 2,
+                            orderId = 13,
+                            price = 60.0,
+                            productId = 79,
+                            productName = "T-Shirt",
+                            quantity = 2,
+                            userId = 123
+                        )
+                    ),
+                    orderDate = "2023-10-15",
+                    status = "Delivered",
+                    totalAmount = 896.0,
+                    userId = 123
                 )
             ),
             msg = "OrderList"

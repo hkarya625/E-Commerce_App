@@ -11,12 +11,13 @@ import kotlinx.coroutines.launch
 
 class OrdersViewModel(
    private val orderListUseCase: OrderListUseCase,
+    private val appSession: AppSession
 ):ViewModel() {
 
     private val _orderState = MutableStateFlow<OrderEvent>(OrderEvent.Loading)
     val orderState = _orderState
 
-    val userId = AppSession.getUser().toLong()
+    val userId = appSession.getUser().toLong()
 
     init {
         getOrderList()

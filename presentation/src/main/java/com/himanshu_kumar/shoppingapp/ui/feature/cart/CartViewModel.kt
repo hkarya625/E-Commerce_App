@@ -15,14 +15,15 @@ import kotlinx.coroutines.launch
 class CartViewModel(
     private val cartUseCase: GetCartUseCase,
     private val updateQuantityUseCase: UpdateQuantityUseCase,
-    private val deleteItemUseCase: DeleteProductUseCase
+    private val deleteItemUseCase: DeleteProductUseCase,
+    private val appSession: AppSession
 ) : ViewModel()
 {
 
     private val _uiState = MutableStateFlow<CartEvent>(CartEvent.Loading)
     val uiState = _uiState
 
-    val userId = AppSession.getUser().toLong()
+    val userId = appSession.getUser().toLong()
 
     init {
         getCart()

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -18,11 +19,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.himanshu_kumar.shoppingapp.R
 import com.himanshu_kumar.shoppingapp.navigation.HomeScreen
 import com.himanshu_kumar.shoppingapp.navigation.LoginScreen
 import com.himanshu_kumar.shoppingapp.navigation.RegisterScreen
@@ -53,7 +57,7 @@ fun RegisterScreen(
             }
             is RegisterState.Loading -> {
                 CircularProgressIndicator()
-                Text(text = "Loading...")
+                Text(text = stringResource(R.string.loading))
             }
             else ->{
                 RegisterContent(
@@ -62,7 +66,6 @@ fun RegisterScreen(
                     },
                     onLoginClick = {
                         navController.popBackStack()
-//                        navController.navigate(LoginScreen)
                     }
                 )
             }
@@ -85,7 +88,7 @@ fun RegisterContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Register",
+        Text(text = stringResource(R.string.register),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
             fontSize = 25.sp
@@ -95,7 +98,7 @@ fun RegisterContent(
             onValueChange = {
                 email.value = it
             },
-            label = { Text(text = "Email") },
+            label = { Text(text = stringResource(R.string.email)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
@@ -105,10 +108,11 @@ fun RegisterContent(
             onValueChange = {
                 password.value = it
             },
-            label = { Text(text = "Password") },
+            label = { Text(text = stringResource(R.string.password)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
+            singleLine = true,
             visualTransformation = PasswordVisualTransformation()
         )
         OutlinedTextField(
@@ -116,22 +120,24 @@ fun RegisterContent(
             onValueChange = {
                 name.value = it
             },
-            label = { Text(text = "Name") },
+            label = { Text(text = stringResource(R.string.name)) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp)
+                .padding(vertical = 8.dp),
+            singleLine = true
         )
         Button(
             onClick = {
                 onRegisterClick(email.value, password.value, name.value)
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = email.value.isNotEmpty() && password.value.isNotEmpty() && name.value.isNotEmpty()
+            enabled = email.value.isNotEmpty() && password.value.isNotEmpty() && name.value.isNotEmpty(),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.button_color))
         ) {
-            Text(text = "Register")
+            Text(text = stringResource(R.string.register))
         }
         Text(
-            text = "Already have an account? Login",
+            text = stringResource(R.string.already_have_account),
             modifier = Modifier.padding(vertical = 8.dp)
                 .clickable {
                     onLoginClick()

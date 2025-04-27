@@ -13,13 +13,14 @@ import kotlinx.coroutines.launch
 
 class CartSummaryViewModel(
     private val cartSummaryUseCase: CartSummaryUseCase,
-    private val placeOrderUseCase: PlaceOrderUseCase
+    private val placeOrderUseCase: PlaceOrderUseCase,
+    private val appSession: AppSession
     ):ViewModel() {
     private val _uiState = MutableStateFlow<CartSummaryEvent>(CartSummaryEvent.Loading)
     val uiState = _uiState
 
 
-    val userId = AppSession.getUser().toLong()
+    val userId = appSession.getUser().toLong()
 
     init {
         getCartSummary(userId)

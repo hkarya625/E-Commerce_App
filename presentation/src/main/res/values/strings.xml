@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">ShoppingApp</string>
+    <string name="loading">Loading…</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="already_have_account">Already have an account? Login</string>
+    <string name="register">Register</string>
+    <string name="name">Name</string>
+    <string name="does_not_have_account">Don\'t have account? Register</string>
+    <string name="all_categories" translatable="false">All Items</string>
+    <string name="image_slider">Image Slider</string>
 </resources>

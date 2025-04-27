@@ -5,29 +5,37 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.himanshu_kumar.domain.model.CategoriesListModel
 import com.himanshu_kumar.domain.model.ProductListModel
+import com.himanshu_kumar.domain.model.UserDomainModel
 import com.himanshu_kumar.domain.network.ResultWrapper
 import com.himanshu_kumar.domain.usecase.GetCategoriesUserCase
 import com.himanshu_kumar.domain.usecase.GetProductUseCase
+import com.himanshu_kumar.shoppingapp.AppSession
+import com.himanshu_kumar.shoppingapp.ui.feature.profile.ProfileScreenEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val getProductUseCase: GetProductUseCase,
-    private val categoryUseCase: GetCategoriesUserCase
+    private val categoryUseCase: GetCategoriesUserCase,
+    private val appSession: AppSession
     ) : ViewModel() {               // ViewModel for the home screen, manages product data.
 
     private val _uiState = MutableStateFlow<HomeScreenUIEvents>(HomeScreenUIEvents.Loading)         // MutableStateFlow to hold the UI state, initialized with Loading.
     val uiState: MutableStateFlow<HomeScreenUIEvents> = _uiState                                    // Exposes the UI state as a read-only StateFlow.
 
+    private val _userDetails = MutableStateFlow<UserDomainModel?>(null)         // MutableStateFlow to hold the UI state, initialized with Loading.
+    val userDetails = _userDetails
+
     init {
         getAllProducts()
+        getUserDetail()
     }
 
     private fun getAllProducts(){
         viewModelScope.launch {
             _uiState.value = HomeScreenUIEvents.Loading
             val featured = getProducts(null)
-            val popularProducts = getProducts(3)
+            val popularProducts = getProducts(5)
             val categories = getCategories()
             if(featured.isEmpty() && popularProducts.isEmpty() && categories.isEmpty()){
                 _uiState.value = HomeScreenUIEvents.Error("Something went wrong")
@@ -42,7 +50,6 @@ class HomeViewModel(
         categoryUseCase.execute().let { result ->
             when (result) {
                 is ResultWrapper.Success -> {
-                    Log.d("Categories", (result).value.toString())
                     return (result).value
                 }
                 is ResultWrapper.Failure -> {
@@ -64,6 +71,11 @@ class HomeViewModel(
                 }
             }
         }
+    }
+    private fun getUserDetail() {
+        val user = appSession.getUserDetails()
+        Log.d("ProfileViewModel", "getUserDetail: $user")
+        _userDetails.value = user
     }
 }
 

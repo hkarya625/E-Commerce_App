@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -36,9 +38,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.himanshu_kumar.domain.model.CartItemModel
@@ -104,13 +108,24 @@ fun CartScreen(
                     .nestedScroll(pullToRefreshState.nestedScrollConnection)
                     .padding(16.dp)
             ) {
-                Text(text = "Cart", style = MaterialTheme.typography.titleMedium)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp, vertical = 16.dp)
+                ){
+                    Image(
+                        painter = painterResource(R.drawable.ic_back),
+                        contentDescription = null,
+                        modifier = Modifier.align(Alignment.CenterStart)
+                    )
+                    Text(text = "My Cart", style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.align(Alignment.Center))
+                }
                 Spacer(modifier = Modifier.size(8.dp))
                 val shouldShowList = !loading.value && errorMsg.value == null
                 AnimatedVisibility(
                     visible = shouldShowList,
-                    enter = fadeIn(),
-                    modifier = Modifier.weight(1f)
+                    enter = fadeIn()
                 ) {
                     LazyColumn {
                         items(cartItems.value){item->
@@ -123,15 +138,34 @@ fun CartScreen(
                         }
                     }
                 }
+                Spacer(Modifier.weight(0.5f))
+
+                   Row(
+                       modifier = Modifier
+                           .fillMaxWidth()
+                           .padding(16.dp)
+                   ){
+                       Text(text = "Total", style = MaterialTheme.typography.titleSmall, color = Color.LightGray)
+                       Spacer(Modifier.weight(1f))
+                       Text(text = "$${cartItems.value.sumOf { it.price * it.quantity }}",style = MaterialTheme.typography.titleSmall, color = Color.Black)
+                   }
+                Spacer(Modifier.size(15.dp))
                 if(shouldShowList)
                 {
-                    Button(onClick = {
-                        navController.navigate(CartSummaryScreen)
-                    }, modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
-                        .align(Alignment.CenterHorizontally)) {
-                        Text(text = "Checkout")
+                    Button(
+                        onClick = {
+                            navController.navigate(CartSummaryScreen)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp)
+                            .align(Alignment.CenterHorizontally),
+                        colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.button_color))
+                    ) {
+                        Text(
+                            text = "Proceed to checkout",
+                            style = MaterialTheme.typography.titleMedium,
+                        )
                     }
                 }
             }
@@ -161,32 +195,37 @@ fun CartItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 4.dp)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(12.dp))
             .background(Color.LightGray.copy(alpha = 0.4f))
     ) {
         AsyncImage(
             model = item.imageUrl,
             contentDescription = null,
-            modifier = Modifier.size(126.dp, 100.dp),
+            modifier = Modifier.size(126.dp, 100.dp).padding(8.dp),
             contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.size(8.dp))
         Column(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight(),
+                .weight(1f),
             verticalArrangement = Arrangement.Center
         ) {
             Spacer(modifier = Modifier.size(8.dp))
             Text(
                 text = item.productName,
-                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium)
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium)
             )
             Spacer(modifier = Modifier.size(4.dp))
             Text(
                 text = "$ ${item.price}",
-                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
                 color = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.size(2.dp))
+            Text(
+                text = "Size L | Color: Blue",
+                fontSize = 10.sp,
+                color = Color.Black
             )
         }
         Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.End) {

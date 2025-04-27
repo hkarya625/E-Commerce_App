@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -18,12 +19,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.himanshu_kumar.shoppingapp.R
 import com.himanshu_kumar.shoppingapp.navigation.HomeScreen
 import com.himanshu_kumar.shoppingapp.navigation.RegisterScreen
 import org.koin.androidx.compose.koinViewModel
@@ -51,7 +55,7 @@ fun LoginScreen(
             }
             is LoginState.Loading -> {
                 CircularProgressIndicator()
-                Text(text = "Loading...")
+                Text(text = stringResource(R.string.loading))
             }
             else ->{
                 LoginContent(
@@ -81,7 +85,7 @@ fun LoginContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Login",
+        Text(text = stringResource(R.string.login),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
             fontSize = 25.sp
@@ -91,20 +95,22 @@ fun LoginContent(
             onValueChange = {
                 email.value = it
             },
-            label = { Text(text = "Email") },
+            label = { Text(text = stringResource(R.string.email)) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp)
+                .padding(vertical = 8.dp),
+            singleLine = true
         )
         OutlinedTextField(
             value = password.value,
             onValueChange = {
                 password.value = it
             },
-            label = { Text(text = "Password") },
+            label = { Text(text = stringResource(R.string.password)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
+            singleLine = true,
             visualTransformation = PasswordVisualTransformation()
         )
         Button(
@@ -112,12 +118,13 @@ fun LoginContent(
                 onSignInClick(email.value, password.value)
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = email.value.isNotEmpty() && password.value.isNotEmpty()
+            enabled = email.value.isNotEmpty() && password.value.isNotEmpty(),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.button_color))
         ) {
-            Text(text = "Login")
+            Text(text = stringResource(R.string.login))
         }
         Text(
-            text = "Don't have account? Register",
+            text = stringResource(R.string.does_not_have_account),
             modifier = Modifier.padding(vertical = 8.dp)
                 .clickable {
                     onRegisterClick()
