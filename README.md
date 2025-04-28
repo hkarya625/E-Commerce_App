@@ -84,17 +84,6 @@ Backend data is fetched using the <a href="https://api.escuelajs.co" target="_bl
   <li>Abstracted business logic away from UI for better maintainability and scalability.</li>
 </ul>
 
-<hr>
-
-<h3>🚀 How to Run:</h3>
-<ol>
-  <li>Clone the repository using <code>git clone [your-repo-link]</code></li>
-  <li>Open the project in Android Studio</li>
-  <li>Connect an Android device or start an emulator</li>
-  <li>Click <b>Run</b> to build and launch the app</li>
-</ol>
-
-<hr>
 
 <h3>▶️ Demo Video :</h3>
 <p><a href="https://ik.imagekit.io/zgqm2s7uc/e-commerce_app_demo.mp4?updatedAt=1745834559963" target="_blank"><b>Watch Demo Video</b></a></p>
