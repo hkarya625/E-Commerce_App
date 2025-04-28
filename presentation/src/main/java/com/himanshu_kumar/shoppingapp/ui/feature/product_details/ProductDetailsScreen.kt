@@ -339,7 +339,8 @@ fun ProductDetailsContent(product: UiProductModel, viewModel: ProductDetailsView
                 onClick = { viewModel.addProductToCart(product) },
                 modifier = Modifier
                     .weight(1f)
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(8.dp)),
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.button_color))
             ) {
                 Text("Buy Now")
             }
