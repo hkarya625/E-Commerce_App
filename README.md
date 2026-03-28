@@ -5,7 +5,7 @@
   <li><img src="https://img.icons8.com/color/48/000000/kotlin.png" width="24"/> <b>Kotlin</b></li>
   <li><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjC97Z8BResg5dlPqczsRCFhP6zewWX0X0e7fVPG-G7PuUZwwZVsi9OPoqJYkgqT2h0FI95SsmWzVEgpt8b8HAqFiIxZ98TFtY4lE0b8UrtVJ2HrJebRwl6C9DslsQDl9KnBIrdHS6LtkY/s1600/jetpack+compose+icon_RGB.png" width="24"/> <b>Jetpack Compose</b> (Modern UI Toolkit)</li>
   <li><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/Ktor_icon.png" width="24"/> <b>Ktor</b> (HTTP Client)</li>
-  <li><img src="https://kotzilla.io/_next/image?url=https%3A%2F%2Fstorage.googleapis.com%2Fstrapi_cms_gcp%2Fkoin_396c65e7f9%2Fkoin_396c65e7f9.png&w=3840&q=75" width="24"/> <b>Koin</b> (Dependency Injection Framework)</li>
+  <li><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxhaNVZNWM1OA0gXGeuw6vj41qVpmZjY6Utw&s" width="24"/> <b>Koin</b> (Dependency Injection Framework)</li>
   <li><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE8luHMhZ2AFhykjAgeP9SUJNJn5MvUeqlzg&s" width="24"/> <b>Clean Architecture</b> (with abstraction layers)</li>
 </ul>
 
